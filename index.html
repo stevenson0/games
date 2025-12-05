@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shadow Mirror Maze</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="gameContainer">
+
+    <!-- START SCREEN -->
+    <div id="startScreen" class="overlay">
+      <h1 class="title">SHADOW MIRROR<br>MAZE</h1>
+      <p class="subtitle">Control two realities. One moves, the other mirrors.</p>
+
+      <button id="playButton" class="primary-btn">PLAY GAME</button>
+      <button id="levelSelectOpen" class="secondary-btn">LEVEL SELECT</button>
+
+      <!-- AUDIO -->
+      <div id="audioControls">
+        <button id="musicToggle" class="audio-toggle">Music: ON</button>
+        <button id="sfxToggle" class="audio-toggle">SFX: ON</button>
+      </div>
+    </div>
+
+    <!-- LEVEL SELECT -->
+    <div id="levelSelectScreen" class="overlay hidden">
+      <h2 class="menu-title">SELECT LEVEL</h2>
+      <div id="levelGrid"></div>
+      <button id="backToMenu" class="primary-btn">BACK</button>
+    </div>
+
+    <!-- PAUSE MENU -->
+    <div id="pauseMenu" class="overlay hidden">
+      <div class="pause-panel">
+        <h2 class="menu-title">PAUSED</h2>
+
+        <button id="resumeBtn" class="menu-btn">
+          <img src="assets/icons/control-resume-svgrepo-com.svg" /> Resume
+        </button>
+
+        <button id="pauseRestartBtn" class="menu-btn">
+          <img src="assets/icons/resume-svgrepo-com.svg" /> Restart Level
+        </button>
+
+        <button id="pauseLevelsBtn" class="menu-btn">
+          <img src="assets/icons/levels-ui-svgrepo-com.svg" /> Level Select
+        </button>
+
+        <button id="pauseSettingsBtn" class="menu-btn">
+          <img src="assets/icons/settings-svgrepo-com.svg" /> Settings
+        </button>
+
+        <button id="pauseHomeBtn" class="menu-btn">
+          <img src="assets/icons/home-svgrepo-com.svg" /> Main Menu
+        </button>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="settingsScreen" class="overlay hidden">
+      <div class="settings-panel">
+        <h2 class="menu-title">SETTINGS</h2>
+
+        <label class="slider-label">Master Volume</label>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" />
+
+        <button id="settingsMusicToggle" class="audio-toggle">Music: ON</button>
+        <button id="settingsSfxToggle" class="audio-toggle">SFX: ON</button>
+
+        <button id="settingsBackBtn" class="primary-btn">BACK</button>
+      </div>
+    </div>
+
+    <!-- LEVEL COMPLETE -->
+    <div id="levelCompleteScreen" class="overlay hidden">
+      <h2>LEVEL COMPLETE</h2>
+      <div id="resultStars" class="stars">★★★</div>
+      <button id="nextLevelButton" class="primary-btn">NEXT LEVEL</button>
+    </div>
+
+    <!-- GAME OVER -->
+    <div id="gameOverScreen" class="overlay hidden">
+      <h2 class="gameover-title">TIME'S UP</h2>
+      <p class="gameover-subtitle">The mirrors fell out of sync.</p>
+      <div class="stars small">☆☆☆</div>
+      <button id="retryButton" class="primary-btn">RESTART LEVEL</button>
+      <button id="gameOverHomeButton" class="secondary-btn">MAIN MENU</button>
+    </div>
+
+    <!-- GAME COMPLETE -->
+    <div id="gameCompleteScreen" class="overlay hidden">
+      <h2>CONGRATULATIONS!</h2>
+      <p>You mastered the mirror worlds.</p>
+      <button id="homeButton" class="primary-btn">MAIN MENU</button>
+    </div>
+
+    <!-- UI -->
+    <div id="ui">
+      <div id="levelCounter">1</div>
+
+      <div id="timerContainer">
+        <span id="timerLabel">--:--</span>
+        <span id="starDisplay">★★★</span>
+      </div>
+
+      <div id="uiButtons">
+        <button id="pauseButton" class="circle-btn">
+          <img src="assets/icons/pause-circle-svgrepo-com.svg">
+        </button>
+
+        <button id="restartButton" class="circle-btn">
+          <img src="assets/icons/resume-svgrepo-com.svg">
+        </button>
+      </div>
+    </div>
+
+    <!-- CONTROLS OVERLAY -->
+    <div id="controlsOverlay">
+      <div class="keys-container">
+        <div class="keys-group">
+          <div class="key">W</div>
+          <div class="row">
+            <div class="key">A</div>
+            <div class="key">S</div>
+            <div class="key">D</div>
+          </div>
+        </div>
+        <div class="divider">OR</div>
+        <div class="keys-group">
+          <div class="key">↑</div>
+          <div class="row">
+            <div class="key">←</div>
+            <div class="key">↓</div>
+            <div class="key">→</div>
+          </div>
+        </div>
+      </div>
+      <div class="objective">REACH BOTH EXITS</div>
+    </div>
+
+    <!-- GAME WORLD -->
+    <div id="gameWorld" class="shake-target">
+      <div id="leftWorld" class="world">
+        <div id="leftGrid" class="grid"></div>
+        <div id="leftPlayer" class="player"></div>
+        <div id="leftExit" class="exit"></div>
+      </div>
+      <div id="divider"></div>
+
+      <div id="rightWorld" class="world">
+        <div id="rightGrid" class="grid"></div>
+        <div id="rightPlayer" class="player mirror"></div>
+        <div id="rightExit" class="exit"></div>
+      </div>
+    </div>
+
+    <div id="particlesContainer"></div>
+
+    <!-- MOBILE D-PAD -->
+    <div id="dpadContainer" class="mobile-only">
+      <h2 id="holdMoveLabel">Hold to Move</h2>
+      <div id="dpad">
+        <div class="dpad-btn" id="dpad-up"></div>
+        <div class="dpad-row">
+          <div class="dpad-btn" id="dpad-left"></div>
+          <div class="dpad-btn" id="dpad-right"></div>
+        </div>
+        <div class="dpad-btn" id="dpad-down"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
